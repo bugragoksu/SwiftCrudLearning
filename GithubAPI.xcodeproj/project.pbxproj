@@ -16,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CE611E73275F89FF002B8458 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		CE611E73275F89FF002B8458 /* DataService.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		CE611E76275F99EC002B8458 /* Gist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gist.swift; sourceTree = "<group>"; };
 		CE8F0F0C275F897C00F37BDB /* GithubAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubAPI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8F0F0F275F897C00F37BDB /* GithubAPIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubAPIApp.swift; sourceTree = "<group>"; };

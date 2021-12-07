@@ -9,18 +9,33 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Button("Hello"){
-            DataService.shared.fetchGists { result in
-                switch result{
-                case.success(let gists):
-                    for gist in gists{
-                        print("\(gist)\n")
+        VStack {
+            Button("Get Gists"){
+                
+                DataService.shared.fetchGists { result in
+                    switch result{
+                    case.success(let gists):
+                        for gist in gists{
+                            print("\(gist)\n")
+                        }
+                    case .failure(let error):
+                        print(error)
                     }
-                case .failure(let error):
-                    print(error)
+                }
+            }
+            Button("Post Gist"){
+                DataService.shared.createNewGist(gist: Gist(id: nil, isPublic: true, description: "Hello world", files: ["test_file.txt":File(content: "Hello World")])) { result in
+                    switch result{
+                    case .failure(let error):
+                        print(error)
+                    case .success(let json):
+                        print(json)
+                    }
                 }
             }
         }
+        .padding()
+            .buttonStyle(.bordered)
     }
 }
 
