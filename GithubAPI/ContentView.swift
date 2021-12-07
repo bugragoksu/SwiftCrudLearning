@@ -9,8 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        Button("Hello"){
+            DataService.shared.fetchGists { result in
+                switch result{
+                case.success(let json):
+                    print(json)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
     }
 }
 
