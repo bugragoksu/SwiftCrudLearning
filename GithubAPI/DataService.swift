@@ -16,7 +16,7 @@ class DataService{
         componentURL.scheme = "https"
         componentURL.host = "api.github.com"
     }
-    func fetchGists(completion : @escaping (Result<Any,Error>)->Void){
+    func fetchGists(completion : @escaping (Result<[Gist],Error>)->Void){
        componentURL.path = "/gists"
        
        guard let validURL = componentURL.url else {
@@ -34,8 +34,9 @@ class DataService{
            }
            
            do {
-               let json = try JSONSerialization.jsonObject(with: validData, options: [])
-               completion(.success(json))
+//               let json = try JSONSerialization.jsonObject(with: validData, options: [])
+               let gists = try JSONDecoder().decode([Gist].self, from: validData)
+               completion(.success(gists))
            }catch let serializationError{
                completion(.failure(serializationError))
            }

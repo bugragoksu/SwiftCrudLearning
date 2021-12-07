@@ -12,8 +12,10 @@ struct ContentView: View {
         Button("Hello"){
             DataService.shared.fetchGists { result in
                 switch result{
-                case.success(let json):
-                    print(json)
+                case.success(let gists):
+                    for gist in gists{
+                        print("\(gist)\n")
+                    }
                 case .failure(let error):
                     print(error)
                 }
