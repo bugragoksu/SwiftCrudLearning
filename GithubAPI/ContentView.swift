@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var starGistText = "Star"
+    @State private var staredGist = false
     var body: some View {
         VStack {
             Button("Get Gists"){
@@ -33,6 +35,19 @@ struct ContentView: View {
                     }
                 }
             }
+            
+            Button(starGistText){
+                self.staredGist = !staredGist
+                starGistText = staredGist ? "Unstar" : "Star"
+                DataService.shared.starUnStarGist(id: "b60886baae3a799d803c7ef52cc753d0", star: staredGist) { result in
+                    print(result)
+                }
+                
+            }
+                
+           
+            
+            
         }
         .padding()
             .buttonStyle(.bordered)

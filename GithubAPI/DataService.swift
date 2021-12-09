@@ -45,31 +45,8 @@ class DataService{
    }
     
     func createNewGist(gist : Gist, completion: @escaping (Result<Any,Error>)->Void){
-        let postComponents = createURLComponents(path: "/gists")
-        
-        guard let composedURL = postComponents.url else {
-            print("URL creation failed..")
-            return
-        }
-        var postRequest = URLRequest(url: composedURL)
-        
-        
-        let authString = "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"
-        var authStringBase64 = ""
-        
-        if let authData = authString.data(using: .utf8){
-            authStringBase64 = authData.base64EncodedString()
-        }
-        postRequest.setValue("Basic \(authStringBase64)", forHTTPHeaderField: "Authorization")
-        postRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        postRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-        do{
-            let gistData = try JSONEncoder().encode(gist)
-            postRequest.httpBody = gistData
-            postRequest.httpMethod = "POST"
-        }catch{
-            print("Gist encoding failed...")
-        }
+        let postRequest = createRequest(url: "/gists", data: gist, method: "POST")
+     
         URLSession.shared.dataTask(with: postRequest) { data, response, error in
             if let httpResponse = response as? HTTPURLResponse{
                 print("Status code : \(httpResponse.statusCode)")
@@ -89,6 +66,50 @@ class DataService{
         }.resume()
     }
     
+    func createRequest(url : String,data : Gist?, method: String)->URLRequest{
+        
+        let postComponents = createURLComponents(path: url)
+    
+        let authString = "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"
+        var authStringBase64 = ""
+        
+        if let authData = authString.data(using: .utf8){
+            authStringBase64 = authData.base64EncodedString()
+        }
+        var request = URLRequest(url: postComponents.url!)
+        request.httpMethod = method
+        if data != nil {
+            do{
+                let body = try JSONEncoder().encode(data)
+                request.httpBody = body
+                
+            }catch{
+                print("Gist encoding failed...")
+            }
+        }
+        request.setValue("Basic \(authStringBase64)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        return request
+    }
+    
+    func starUnStarGist(id :String, star : Bool, completion : @escaping (Bool) -> Void){
+        
+        var starRequest = createRequest(url: "/gists/\(id)/star", data: nil, method: star ? "PUT" : "DELETE")
+        starRequest.setValue("0", forHTTPHeaderField: "Content-Length")
+       
+        URLSession.shared.dataTask(with: starRequest) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 204 {
+                    completion(true)
+                }else{
+                    print("Error : \(String(describing: error?.localizedDescription))")
+                    completion(false)
+                }
+            }
+//
+        }.resume()
+    }
     
     private func createURLComponents(path: String)->URLComponents{
         componentURL.path = path
